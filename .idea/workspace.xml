@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2b969427-17b6-4a20-89ed-9461a5db705c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/contactController.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/contactController.js" afterDir="false" />
-    </list>
+    <list default="true" id="2b969427-17b6-4a20-89ed-9461a5db705c" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,6 +67,7 @@
       <workItem from="1732419061775" duration="5609000" />
       <workItem from="1732428300053" duration="6493000" />
       <workItem from="1732470682274" duration="3000" />
+      <workItem from="1732472453679" duration="350000" />
     </task>
     <servers />
   </component>
