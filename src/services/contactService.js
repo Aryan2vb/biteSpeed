@@ -98,6 +98,8 @@ async function identifyContact(email, phoneNumber) {
            WHERE id = ?`,
                     [primaryContact.id, contact.id]
                 );
+                contact.linkedId = primaryContact.id;
+                contact.linkPrecedence = 'secondary';
             }
         }
 
