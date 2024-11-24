@@ -1,6 +1,7 @@
 const pool = require('../db');
 const res = require("express/lib/response");
 
+// Helper to format response
 function formatResponse(contacts) {
     const primaryContact = contacts.find(
         (c) => c.linkPrecedence === 'primary' && c.linkedId === null
@@ -16,9 +17,11 @@ function formatResponse(contacts) {
     };
 }
 
+// Identify Contact Service
 async function identifyContact(email, phoneNumber) {
     const connection = await pool.getConnection();
     try {
+        // Step 1: Fetch direct contacts
         const [directContacts] = await connection.query(
             `SELECT * FROM Contact 
        WHERE (email = ? OR phoneNumber = ?) 
@@ -27,6 +30,7 @@ async function identifyContact(email, phoneNumber) {
         );
 
         if (directContacts.length === 0) {
+            // Step 2: Insert a new primary contact if no matches are found
             const [result] = await connection.query(
                 `INSERT INTO Contact (email, phoneNumber, linkPrecedence, linkedId) 
          VALUES (?, ?, 'primary', NULL)`,
@@ -40,8 +44,37 @@ async function identifyContact(email, phoneNumber) {
             return formatResponse([newContact[0]]);
         }
 
+        // Step 3: Fetch all related contacts
+        const linkedIds = directContacts.map((c) => c.linkedId).filter(Boolean);
+        const primaryIds = directContacts.map((c) => c.id);
+        const allIds = [...new Set([...linkedIds, ...primaryIds])];
+
+        const [allRelatedContacts] = await connection.query(
+            `SELECT * FROM Contact 
+       WHERE (id IN (?) OR linkedId IN (?)) 
+       AND deletedAt IS NULL
+       ORDER BY createdAt ASC`,
+            [allIds, allIds]
+        );
+
+        let primaryContact = allRelatedContacts.find(
+            (c) => c.linkPrecedence === 'primary' && c.linkedId === null
+        );
+        let secondaryContacts = allRelatedContacts.filter(
+            (c) => c.id !== primaryContact?.id
+        );
+
+        if (!primaryContact) {
+            primaryContact = allRelatedContacts[0];
+            secondaryContacts = allRelatedContacts.slice(1);
+        }
+
+
+
+        // Return formatted response
+        return formatResponse([primaryContact, ...secondaryContacts]);
     }catch (e) {
-        res.status(500).json({ error: e });
+        res.status(500).json({error: e});
 
     }
 }
