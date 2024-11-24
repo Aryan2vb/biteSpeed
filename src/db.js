@@ -9,6 +9,7 @@ const pool = mysql.createPool({
     port: process.env.DB_PORT || 3306,
 });
 
+
 pool.getConnection()
     .then(() => {
         console.log("Database connected successfully!");
