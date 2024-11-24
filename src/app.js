@@ -9,11 +9,6 @@ app.get('/', (req, res) => {
         message: 'lets check your biteSpeed',
 
         info:"use this https://bite-speed-lemon.vercel.app/api/v1/identify on post method "
-        inbody:{
-            "email":  "mcfly@hillvalley.edu",
-            "phoneNumber": "123456" ,
-            "or ANy":""
-        }
 
     })
 })
