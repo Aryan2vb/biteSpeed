@@ -3,6 +3,6 @@ const { identifyContactController , getData } = require('../controllers/contactC
 const router = express.Router();
 
 router.post('/identify', identifyContactController);
-// router.get('/identify', getData);
+router.get('/identify', getData);
 
 module.exports = router;

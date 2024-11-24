@@ -1,4 +1,5 @@
 const pool = require('../db');
+const res = require("express/lib/response");
 
 // Helper to format response
 function formatResponse(contacts) {
@@ -111,4 +112,24 @@ async function identifyContact(email, phoneNumber) {
     }
 }
 
-module.exports = { identifyContact };
+async function getContact() {
+    const connection = await pool.getConnection();
+    try {
+        const [rows] = await connection.query("SELECT * FROM Contact");
+        return rows.map(row => ({
+            id: row.id,
+            phoneNumber: row.phoneNumber,
+            email: row.email,
+            linkedId: row.linkedId,
+            linkPrecedence: row.linkPrecedence,
+            createdAt: row.createdAt,
+            updatedAt: row.updatedAt,
+            deletedAt: row.deletedAt,
+        }));
+    } catch (e) {
+        console.error(e);
+        throw new Error('Database query failed');
+    }
+}
+
+module.exports = { identifyContact ,getContact };

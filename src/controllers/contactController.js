@@ -1,5 +1,5 @@
 // const pool = require('../db');
-const { identifyContact } = require('../services/contactService');
+const { identifyContact , getContact} = require('../services/contactService');
 
 const identifyContactController = async (req, res) => {
     const { email, phoneNumber } = req.body;
@@ -24,15 +24,15 @@ const identifyContactController = async (req, res) => {
     }
 };
 
-//
-// const getData = async (req, res) => {
-//     const connection = await pool.getConnection();
-//     try {
-//         const [Data] = await connection.query('Select * from Contact');
-//         return res.status(200).json(Data);
-//     }catch(err) {
-//         return res.status(400).json({ error: 'Error getting contact' });
-//     }
-// }
 
-module.exports = { identifyContactController  };
+const getData = async (req, res) => {
+    try {
+        const response = await getContact();
+        return res.status(200).json(response); 
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ error: 'Error getting contact' });
+    }
+};
+
+module.exports = { identifyContactController ,getData  };
