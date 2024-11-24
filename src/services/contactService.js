@@ -18,8 +18,7 @@ function formatResponse(contacts) {
 
 async function identifyContact(email, phoneNumber) {
     const connection = await pool.getConnection();
-
-    try{
+    try {
         const [directContacts] = await connection.query(
             `SELECT * FROM Contact 
        WHERE (email = ? OR phoneNumber = ?) 
@@ -27,12 +26,24 @@ async function identifyContact(email, phoneNumber) {
             [email, phoneNumber]
         );
 
+        if (directContacts.length === 0) {
+            const [result] = await connection.query(
+                `INSERT INTO Contact (email, phoneNumber, linkPrecedence, linkedId) 
+         VALUES (?, ?, 'primary', NULL)`,
+                [email, phoneNumber]
+            );
+
+            const [newContact] = await connection.query(`SELECT * FROM Contact WHERE id = ?`, [
+                result.insertId,
+            ]);
+
+            return formatResponse([newContact[0]]);
+        }
 
     }catch (e) {
         res.status(500).json({ error: e });
 
     }
-
 }
 
 module.exports = { identifyContact };
