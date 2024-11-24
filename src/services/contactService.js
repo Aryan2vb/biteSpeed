@@ -20,7 +20,7 @@ function formatResponse(contacts) {
 async function identifyContact(email, phoneNumber) {
     const connection = await pool.getConnection();
     try {
-        // Step 1: Fetch direct contacts
+        //  Fetch direct contacts
         const [directContacts] = await connection.query(
             `SELECT * FROM Contact 
        WHERE (email = ? OR phoneNumber = ?) 
@@ -29,7 +29,7 @@ async function identifyContact(email, phoneNumber) {
         );
         // console.log(directContacts);
         if (directContacts.length === 0) {
-            // Step 2: Insert a new primary contact if no matches are found
+            // it Insert a new primary contact if no matches are found
             const [result] = await connection.query(
                 `INSERT INTO Contact (email, phoneNumber, linkPrecedence, linkedId) 
          VALUES (?, ?, 'primary', NULL)`,
@@ -69,7 +69,7 @@ async function identifyContact(email, phoneNumber) {
             secondaryContacts = allRelatedContacts.slice(1);
         }
 
-        // Step 4: Add new secondary contact if new info is provided
+        // it Add new secondary contact if new info is provided
         const newInfoProvided =
             (email && !allRelatedContacts.some((c) => c.email === email)) ||
             (phoneNumber && !allRelatedContacts.some((c) => c.phoneNumber === phoneNumber));
@@ -81,14 +81,31 @@ async function identifyContact(email, phoneNumber) {
                 [email || null, phoneNumber || null, primaryContact.id]
             );
 
+            const [newSecondaryContact] = await connection.query(
+                `SELECT * FROM Contact WHERE id = ?`,
+                [result.insertId]
+            );
+            secondaryContacts.push(newSecondaryContact[0]);
         }
+        // console.log(secondaryContacts)
 
-
+        // it Update inconsistent linkedId for secondary contacts
+        for (const contact of secondaryContacts) {
+            if (contact.linkedId !== primaryContact.id) {
+                await connection.query(
+                    `UPDATE Contact 
+           SET linkedId = ?, linkPrecedence = 'secondary' 
+           WHERE id = ?`,
+                    [primaryContact.id, contact.id]
+                );
+            }
+        }
 
         // Return formatted response
         return formatResponse([primaryContact, ...secondaryContacts]);
     }catch (e) {
         res.status(500).json({error: e});
+
     }
 }
 
