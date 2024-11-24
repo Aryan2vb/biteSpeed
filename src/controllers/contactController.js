@@ -28,7 +28,7 @@ const identifyContactController = async (req, res) => {
 const getData = async (req, res) => {
     try {
         const response = await getContact();
-        return res.status(200).json(response); 
+        return res.status(200).json(response);
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ error: 'Error getting contact' });
