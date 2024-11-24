@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
     return res.status(200).json({
         message: 'lets check your biteSpeed',
 
-        info:"use this https://bite-speed-lemon.vercel.app/api/v1/identify on post method "
+        info:"use this https://bite-speed-lemon.vercel.app/api/v1/identify on post method and add email and phoneNumber is json "
 
     })
 })
