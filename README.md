@@ -25,7 +25,7 @@ The API offers two main functionalities:
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/Aryan2vb/biteSpeed.git
    ```
 
 2. **Install dependencies:**
