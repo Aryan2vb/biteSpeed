@@ -11,29 +11,29 @@ This API identifies and manages contacts based on provided email and/or phone nu
 
 The API offers two main functionalities:
 
-1. **Contact Identification (`POST /api/v1/identify`):**  This endpoint takes an email and/or phone number as input (JSON payload) and returns a structured response containing:
-    * `primaryContactId`: The ID of the primary contact.
-    * `emails`: A unique array of emails associated with the contact.
-    * `phoneNumbers`: A unique array of phone numbers associated with the contact.
-    * `secondaryContactIds`: An array of IDs for secondary contacts associated with the primary contact.
+1. Contact Identification (`POST /api/v1/identify`):  This endpoint takes an email and/or phone number as input (JSON payload) and returns a structured response containing:
+     `primaryContactId`: The ID of the primary contact.
+     `emails`: A unique array of emails associated with the contact.
+     `phoneNumbers`: A unique array of phone numbers associated with the contact.
+     `secondaryContactIds`: An array of IDs for secondary contacts associated with the primary contact.
 
     If no matching contact is found, a new primary contact is created.  If new information (email or phone number) is provided for an existing contact, a new secondary contact is added. The API ensures that secondary contacts are properly linked to their primary contact.
 
-2. **Get All Contacts (`GET /api/v1/identify`):** This endpoint returns all contacts from the database.  Primarily for debugging and testing purposes.
+2. Get All Contacts (`GET /api/v1/identify`): This endpoint returns all contacts from the database.  Primarily for debugging and testing purposes.
 
 ## Setup
 
-1. **Clone the repository:**
+1. Clone the repository:
    ```bash
    git clone https://github.com/Aryan2vb/biteSpeed.git
    ```
 
-2. **Install dependencies:**
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-3. **Configure environment variables:** Create a `.env` file in the root directory and add the following variables:
+3. Configure environment variables: Create a `.env` file in the root directory and add the following variables:
    ```
    DB_HOST=<your_db_host>
    DB_USER=<your_db_user>
@@ -42,7 +42,7 @@ The API offers two main functionalities:
    DB_PORT=<your_db_port> 
    ```
 
-4. **Create the database and table:**  You'll need to manually create a MySQL database and table named `Contact` with the following structure:
+4. Create the database and table:  You'll need to manually create a MySQL database and table named `Contact` with the following structure:
 
    ```sql
    CREATE TABLE Contact (
@@ -57,7 +57,7 @@ The API offers two main functionalities:
    );
    ```
 
-5. **Run the server:**
+5. Run the server:
    ```bash
    npm start
    ```
@@ -72,16 +72,16 @@ The API offers two main functionalities:
 
 ## Technologies Used
 
-* Node.js
-* Express.js
-* MySQL
-* mysql2/promise
-* dotenv
+ Node.js
+ Express.js
+ MySQL
+ mysql2/promise
+ dotenv
 
 
 ## Error Handling
 
 The API returns appropriate HTTP status codes and error messages for various scenarios:
 
-* **400 Bad Request:** If the request body is missing required fields (email or phoneNumber).
-* **500 Internal Server Error:** If a database error occurs.
+ 400 Bad Request: If the request body is missing required fields (email or phoneNumber).
+ 500 Internal Server Error: If a database error occurs.
