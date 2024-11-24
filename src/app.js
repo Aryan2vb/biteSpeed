@@ -4,6 +4,9 @@ const contactRoutes = require('./routes/contactRoutes');
 const app = express();
 app.use(express.json());
 
+app.get('/', (req, res) => {
+    return res.status(200).send('lets check your bite speed');
+})
 
 app.get('/bolo', (req, res) => {
     return res.status(200).json("Jai Shree Ram")
