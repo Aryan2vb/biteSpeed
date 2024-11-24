@@ -1,5 +1,4 @@
 const pool = require('../db');
-const res = require("express/lib/response");
 
 // Helper to format response
 function formatResponse(contacts) {
@@ -28,7 +27,7 @@ async function identifyContact(email, phoneNumber) {
        AND deletedAt IS NULL`,
             [email, phoneNumber]
         );
-
+        // console.log(directContacts);
         if (directContacts.length === 0) {
             // Step 2: Insert a new primary contact if no matches are found
             const [result] = await connection.query(
@@ -48,6 +47,7 @@ async function identifyContact(email, phoneNumber) {
         const linkedIds = directContacts.map((c) => c.linkedId).filter(Boolean);
         const primaryIds = directContacts.map((c) => c.id);
         const allIds = [...new Set([...linkedIds, ...primaryIds])];
+        // console.log(allIds);
 
         const [allRelatedContacts] = await connection.query(
             `SELECT * FROM Contact 
@@ -69,13 +69,26 @@ async function identifyContact(email, phoneNumber) {
             secondaryContacts = allRelatedContacts.slice(1);
         }
 
+        // Step 4: Add new secondary contact if new info is provided
+        const newInfoProvided =
+            (email && !allRelatedContacts.some((c) => c.email === email)) ||
+            (phoneNumber && !allRelatedContacts.some((c) => c.phoneNumber === phoneNumber));
+
+        if (newInfoProvided) {
+            const [result] = await connection.query(
+                `INSERT INTO Contact (email, phoneNumber, linkedId, linkPrecedence) 
+         VALUES (?, ?, ?, 'secondary')`,
+                [email || null, phoneNumber || null, primaryContact.id]
+            );
+
+        }
+
 
 
         // Return formatted response
         return formatResponse([primaryContact, ...secondaryContacts]);
     }catch (e) {
         res.status(500).json({error: e});
-
     }
 }
 
