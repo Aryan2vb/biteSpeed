@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
     return res.status(200).json({
         message: 'lets check your biteSpeed',
 
-        info:"use this https://bite-speed-lemon.vercel.app/api/v1/identify on post method and add email and phoneNumber is json "
+        info:"use this https://bite-speed-lemon.vercel.app/identify on post method and add email and phoneNumber in body json "
 
     })
 })
@@ -17,7 +17,8 @@ app.get('/bolo', (req, res) => {
     return res.status(200).json("Jai Shree Ram")
 })
 
-app.use('/api/v1', contactRoutes);
+app.use('/', contactRoutes);
+
 
 const PORT = 3001;
 app.listen(PORT, () => {
