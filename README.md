@@ -66,8 +66,8 @@ The API offers two main functionalities:
 
 | Method | Endpoint             | Description                                                                 | Request Body (JSON)          | Response Body (JSON)                                      |
 |--------|----------------------|-----------------------------------------------------------------------------|-------------------------------|-------------------------------------------------------------|
-| POST   | `/api/v1/identify` | Identifies a contact based on email and/or phone number.                     | `{ "email": "test@example.com", "phoneNumber": "1234567890" }` | `{ contact: { primaryContactId, emails, phoneNumbers, secondaryContactIds } }` |
-| GET    | `/api/v1/identify` | Retrieves all contacts from the database (for testing/debugging purposes). | None                            | `[{ id, email, phoneNumber, linkedId, linkPrecedence, createdAt, updatedAt, deletedAt }]` |
+| POST   | `/identify` | Identifies a contact based on email and/or phone number.                     | `{ "email": "test@example.com", "phoneNumber": "1234567890" }` | `{ contact: { primaryContactId, emails, phoneNumbers, secondaryContactIds } }` |
+| GET    | `/identify` | Retrieves all contacts from the database (for testing/debugging purposes). | None                            | `[{ id, email, phoneNumber, linkedId, linkPrecedence, createdAt, updatedAt, deletedAt }]` |
 
 
 ## Technologies Used
