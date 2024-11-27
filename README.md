@@ -1,87 +1,136 @@
-# biteSpeedAssignment
-Identity Reconciliation
+Here’s the enhanced README.md file for your project:
 
+# BiteSpeed Contact Reconciliation API
 
-```markdown
-# BiteSpeed API
+The **BiteSpeed Contact Reconciliation API** is a Node.js-based service that identifies and manages 
+contacts using provided email and/or phone numbers. It ensures accurate linking of primary and secondary 
+contacts and stores the data in a MySQL database.
 
-This API identifies and manages contacts based on provided email and/or phone number.  It utilizes a MySQL database to store and retrieve contact information.
+---
 
-## Functionality
+## 🚀 Features
 
-The API offers two main functionalities:
+### 1. **Contact Identification (`POST /api/v1/identify`)**
+- Accepts **email** and/or **phone number** in the request body.
+- Performs the following:
+  - Identifies an existing contact based on the input.
+  - Links secondary contacts to the primary contact.
+  - If no matching contact is found, creates a new **primary contact**.
+- Returns a structured response:
+  ```json
+  {
+    "contact": {
+      "primaryContactId": 1,
+      "emails": ["test@example.com"],
+      "phoneNumbers": ["1234567890"],
+      "secondaryContactIds": [2, 3]
+    }
+  }
 
-1. Contact Identification (`POST /api/v1/identify`):  This endpoint takes an email and/or phone number as input (JSON payload) and returns a structured response containing:
-     `primaryContactId`: The ID of the primary contact.
-     `emails`: A unique array of emails associated with the contact.
-     `phoneNumbers`: A unique array of phone numbers associated with the contact.
-     `secondaryContactIds`: An array of IDs for secondary contacts associated with the primary contact.
+2. Retrieve All Contacts (GET /api/v1/identify)
 
-    If no matching contact is found, a new primary contact is created.  If new information (email or phone number) is provided for an existing contact, a new secondary contact is added. The API ensures that secondary contacts are properly linked to their primary contact.
+	•	Fetches all contacts stored in the database.
+	•	Useful for debugging and testing.
 
-2. Get All Contacts (`GET /api/v1/identify`): This endpoint returns all contacts from the database.  Primarily for debugging and testing purposes.
+🛠️ Tech Stack
 
-## Setup
+	•	Backend: Node.js, Express.js
+	•	Database: MySQL
+	•	ORM/Driver: mysql2/promise
+	•	Environment Variables: dotenv
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Aryan2vb/biteSpeed.git
-   ```
+📦 Setup and Installation
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+Follow these steps to set up the project locally:
 
-3. Configure environment variables: Create a `.env` file in the root directory and add the following variables:
-   ```
-   DB_HOST=<your_db_host>
-   DB_USER=<your_db_user>
-   DB_PASSWORD=<your_db_password>
-   DB_NAME=<your_db_name>
-   DB_PORT=<your_db_port> 
-   ```
+1. Clone the Repository
 
-4. Create the database and table:  You'll need to manually create a MySQL database and table named `Contact` with the following structure:
+git clone https://github.com/Aryan2vb/biteSpeed.git
+cd biteSpeed
 
-   ```sql
-   CREATE TABLE Contact (
-       id INT AUTO_INCREMENT PRIMARY KEY,
-       email VARCHAR(255),
-       phoneNumber VARCHAR(20),
-       linkedId INT,
-       linkPrecedence ENUM('primary', 'secondary'),
-       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-       updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-       deletedAt TIMESTAMP NULL
-   );
-   ```
+2. Install Dependencies
 
-5. Run the server:
-   ```bash
-   npm start
-   ```
+npm install
 
-## API Endpoints
+3. Configure Environment Variables
 
-| Method | Endpoint             | Description                                                                 | Request Body (JSON)          | Response Body (JSON)                                      |
-|--------|----------------------|-----------------------------------------------------------------------------|-------------------------------|-------------------------------------------------------------|
-| POST   | `/identify` | Identifies a contact based on email and/or phone number.                     | `{ "email": "test@example.com", "phoneNumber": "1234567890" }` | `{ contact: { primaryContactId, emails, phoneNumbers, secondaryContactIds } }` |
-| GET    | `/identify` | Retrieves all contacts from the database (for testing/debugging purposes). | None                            | `[{ id, email, phoneNumber, linkedId, linkPrecedence, createdAt, updatedAt, deletedAt }]` |
+Create a .env file in the root directory and add the following variables:
 
+DB_HOST=<your_db_host>
+DB_USER=<your_db_user>
+DB_PASSWORD=<your_db_password>
+DB_NAME=<your_db_name>
+DB_PORT=<your_db_port>
 
-## Technologies Used
+4. Set Up the Database
 
- Node.js
- Express.js
- MySQL
- mysql2/promise
- dotenv
+Manually create a MySQL database and a table named Contact with the following schema:
 
+CREATE TABLE Contact (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255),
+    phoneNumber VARCHAR(20),
+    linkedId INT,
+    linkPrecedence ENUM('primary', 'secondary'),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deletedAt TIMESTAMP NULL
+);
 
-## Error Handling
+5. Start the Server
 
-The API returns appropriate HTTP status codes and error messages for various scenarios:
+npm start
 
- 400 Bad Request: If the request body is missing required fields (email or phoneNumber).
- 500 Internal Server Error: If a database error occurs.
+The API will be running at http://localhost:3000.
+
+📋 API Endpoints
+
+1. POST /api/v1/identify
+
+Identifies or creates a contact based on the provided email and/or phone number.
+
+Request Body
+
+{
+  "email": "test@example.com",
+  "phoneNumber": "1234567890"
+}
+
+Response Body
+
+{
+  "contact": {
+    "primaryContactId": 1,
+    "emails": ["test@example.com"],
+    "phoneNumbers": ["1234567890"],
+    "secondaryContactIds": [2, 3]
+  }
+}
+
+2. GET /api/v1/identify
+
+Fetches all contacts for testing or debugging.
+
+Response Body
+
+[
+  {
+    "id": 1,
+    "email": "test@example.com",
+    "phoneNumber": "1234567890",
+    "linkedId": null,
+    "linkPrecedence": "primary",
+    "createdAt": "2024-11-27T12:00:00Z",
+    "updatedAt": "2024-11-27T12:00:00Z",
+    "deletedAt": null
+  }
+]
+
+🛡️ Error Handling
+
+	•	400 Bad Request: If required fields (email or phoneNumber) are missing in the request.
+	•	500 Internal Server Error: If a database error occurs or the server encounters an unexpected issue.
+
+👨‍💻 Contributing
+
+Contributions are welcome! Feel free to fork the repository, make changes, and submit a pull request.
