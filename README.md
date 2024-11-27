@@ -40,14 +40,14 @@ The **BiteSpeed Contact Reconciliation API** is a Node.js-based service for mana
 Follow these steps to set up the project locally:
 
 1. Clone the Repository
-
+```
 git clone https://github.com/Aryan2vb/biteSpeed.git
 cd biteSpeed
-
+```
 2. Install Dependencies
-
+```
 npm install
-
+```
 3. Configure Environment Variables
 
 Create a .env file in the root directory with the following variables:
